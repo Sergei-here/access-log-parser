@@ -3,6 +3,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
 
+class VeryLongLine extends RuntimeException {
+    public VeryLongLine(String message) {
+        super(message);
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) {
@@ -31,8 +37,6 @@ public class Main {
                         new BufferedReader(fileReader);
                 String line;
                 int lineCount = 0;
-                String longestLine = "";
-                String shortestLine = "";
                 int longestLength = 0;
                 int shortestLength = Integer.MAX_VALUE;
                 while ((line = reader.readLine()) != null) {
@@ -41,22 +45,20 @@ public class Main {
 
                     if (length > longestLength) {
                         longestLength = length;
-                        longestLine = line;
                     }
 
                     if (length < shortestLength) {
                         shortestLength = length;
-                        shortestLine = line;
                     }
 
                     if (length > 1024) {
-                        throw new IllegalArgumentException("Длина строки превышает 1024 символа");
+                        throw new VeryLongLine("Длина строки превышает 1024 символа");
                     }
                 }
                 System.out.println("Общее количество строк: " + lineCount);
-                System.out.println("Длина самой длинной строки в файле: " + longestLine);
-                System.out.println("Длина самой короткой строки в файле: " + shortestLine);
-            } catch (IllegalArgumentException e) {
+                System.out.println("Длина самой длинной строки в файле: " + longestLength);
+                System.out.println("Длина самой короткой строки в файле: " + shortestLength);
+            } catch (VeryLongLine e) {
                 System.err.println(e.getMessage());
                 System.err.println("Обработка файла прекращена");
             } catch (Exception ex) {
@@ -66,3 +68,4 @@ public class Main {
         }
     }
 }
+
