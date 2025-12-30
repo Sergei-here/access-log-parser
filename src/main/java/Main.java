@@ -4,6 +4,12 @@ import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
+class VeryLongLine extends RuntimeException {
+    public VeryLongLine(String message) {
+        super(message);
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) {
