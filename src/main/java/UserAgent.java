@@ -53,7 +53,6 @@ class UserAgent {
         }
     }
 
-    // Геттеры
     public String getOsType() {
         return osType;
     }

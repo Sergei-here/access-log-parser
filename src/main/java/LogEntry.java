@@ -2,11 +2,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-// Enum для методов HTTP-запросов
-enum HttpMethod {
-    GET, POST, PUT, DELETE, PATCH
-}
-
 // Класс для представления записи лога
 class LogEntry {
     private final String ipAddr;
