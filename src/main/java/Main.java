@@ -2,13 +2,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Scanner;
-
-class VeryLongLine extends RuntimeException {
-    public VeryLongLine(String message) {
-        super(message);
-    }
-}
 
 public class Main {
 
@@ -97,8 +92,7 @@ public class Main {
     }
 
     //Выводим результаты анализа
-    private static void printResults(int totalLines, int yandexBotCount, int googleBotCount,
-                                     Statistics statistics, int parseErrors) {
+    private static void printResults(int totalLines, int yandexBotCount, int googleBotCount, Statistics statistics, int parseErrors) {
         System.out.println("══════════════ РЕЗУЛЬТАТЫ АНАЛИЗА ══════════════");
         System.out.println("Всего строк в файле: " + totalLines);
         System.out.println("Успешно разобрано строк: " + statistics.getEntryCount());
@@ -128,8 +122,39 @@ public class Main {
         } else {
             System.out.println("\nНет успешно разобранных записей для анализа долей!");
         }
-
         System.out.println("════════════════════════════════════════════════");
+
+        // Вывод списка существующих страниц
+        System.out.println("\n══════════════ СУЩЕСТВУЮЩИЕ СТРАНИЦЫ ══════════════");
+        if (statistics.getExistingPagesCount() > 0) {
+            System.out.println("Всего страниц с кодом 200: " + statistics.getExistingPagesCount());
+
+            // Можно вывести первые 10 страниц для примера
+            int counter = 1;
+            for (String page : statistics.getExistingPages()) {
+                if (counter > 20) {
+                    System.out.println("  ... и еще " + (statistics.getExistingPagesCount() - 20) + " страниц");
+                    break;
+                }
+                System.out.println("  " + counter + ". " + page);
+                counter++;
+            }
+        } else {
+            System.out.println("Нет страниц с кодом ответа 200");
+        }
+
+        // Вывод статистики операционных систем
+        System.out.println("\n══════════════ ОПЕРАЦИОННЫЕ СИСТЕМЫ ══════════════");
+        Map<String, Double> osStats = statistics.getOsStatistics();
+        if (!osStats.isEmpty()) {
+            System.out.println("Распределение по операционным системам:");
+            for (Map.Entry<String, Double> entry : osStats.entrySet()) {
+                double percentage = entry.getValue() * 100;
+                System.out.printf("  %s: %.2f%%\n", entry.getKey(), percentage);
+            }
+        } else {
+            System.out.println("Нет данных об операционных системах");
+        }
     }
 
     //Извлекаем User-Agent из строки лога
