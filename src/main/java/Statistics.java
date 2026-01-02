@@ -1,11 +1,18 @@
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 class Statistics {
+
     private long totalTraffic;
     private LocalDateTime minTime;
     private LocalDateTime maxTime;
     private int entryCount;
+    private Set<String> existingPages; // Множество существующих страниц (код ответа 200)
+    private Map<String, Integer> osCounts; // Счетчики операционных систем
 
     // Конструктор без параметров
     public Statistics() {
@@ -13,6 +20,8 @@ class Statistics {
         this.minTime = null;
         this.maxTime = null;
         this.entryCount = 0;
+        this.existingPages = new HashSet<>();
+        this.osCounts = new HashMap<>();
     }
 
     // Метод для добавления записи лога
@@ -30,6 +39,15 @@ class Statistics {
         if (this.maxTime == null || entryTime.isAfter(this.maxTime)) {
             this.maxTime = entryTime;
         }
+
+        // Добавляем страницу в список существующих, если код ответа 200
+        if (entry.getResponseCode() == 200) {
+            existingPages.add(entry.getPath());
+        }
+
+        // Подсчитываем операционные системы
+        String osType = entry.getAgent().getOsType();
+        osCounts.put(osType, osCounts.getOrDefault(osType, 0) + 1);
 
         this.entryCount++;
     }
@@ -50,6 +68,30 @@ class Statistics {
 
         // Возвращаем средний трафик в час
         return (double) totalTraffic / hoursBetween;
+    }
+
+    // Метод для возвращения списка всех существующих страниц сайта (код ответа 200)
+    public Set<String> getExistingPages() {
+        // Возвращаем копию множества, чтобы защитить исходные данные
+        return new HashSet<>(existingPages);
+    }
+
+    // Метод для возвращения статистики операционных систем (доли от 0 до 1)
+    public Map<String, Double> getOsStatistics() {
+        Map<String, Double> osStatistics = new HashMap<>();
+        if (entryCount == 0) {
+            return osStatistics; // Возвращаем пустую карту, если нет записей
+        }
+        // Рассчитываем долю для каждой операционной системы
+        for (Map.Entry<String, Integer> entry : osCounts.entrySet()) {
+            double share = (double) entry.getValue() / entryCount;
+            osStatistics.put(entry.getKey(), share);
+        }
+        return osStatistics;
+    }
+
+    public int getExistingPagesCount() { // возвращаем количество существующих страниц
+        return existingPages.size();
     }
 
     // Дополнительные геттеры для статистики
