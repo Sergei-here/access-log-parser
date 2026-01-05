@@ -1,8 +1,10 @@
 class UserAgent {
     private final String osType;
     private final String browserType;
+    private final String agent;
 
     public UserAgent(String userAgentString) {
+        this.agent = userAgentString;
         this.osType = parseOsType(userAgentString);
         this.browserType = parseBrowserType(userAgentString);
     }
@@ -59,5 +61,14 @@ class UserAgent {
 
     public String getBrowserType() {
         return browserType;
+    }
+
+    // Метод для определения, является ли User-Agent ботом
+    public boolean isBot() {
+        if (agent == null || agent.isEmpty()) {
+            return false;
+        }
+        // Ищем слово "bot" в любом регистре
+        return agent.toLowerCase().contains("bot");
     }
 }
