@@ -1,4 +1,6 @@
-class UserAgent {
+package ru.stepup.model;
+
+public class UserAgent {
     private final String osType;
     private final String browserType;
     private final String agent;

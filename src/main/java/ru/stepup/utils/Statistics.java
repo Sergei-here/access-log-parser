@@ -1,3 +1,8 @@
+package ru.stepup.utils;
+
+import ru.stepup.model.LogEntry;
+import ru.stepup.model.UserAgent;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
