@@ -1,9 +1,11 @@
+package ru.stepup.model;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 // Класс для представления записи лога
-class LogEntry {
+public class LogEntry {
     private final String ipAddr;
     private final LocalDateTime time;
     private final HttpMethod method;
